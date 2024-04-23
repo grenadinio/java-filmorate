@@ -48,11 +48,8 @@ public class UserController {
         try {
             log.info("PUT /users ==> ID: {}, {}", user.getId(), user);
             User oldUser = users.get(user.getId());
-            updateEmail(user, oldUser);
-            updateLogin(user, oldUser);
-            updateName(user, oldUser);
-            updateBirthday(user, oldUser);
-            log.info("PUT /users <== ID: {}, {}", user.getId(), user);
+            updateUser(user, oldUser);
+            log.info("PUT /users <== ID: {}, {}", user.getId(), oldUser);
             return oldUser;
         } catch (Exception e) {
             log.error("Ошибка при обновлении пользователя.", e);
@@ -68,28 +65,20 @@ public class UserController {
         }
     }
 
-    private void updateEmail(User user, User oldUser) {
+    private void updateUser(User user, User oldUser) {
         if (user.getEmail() != null) {
             validateEmailUniqueness(user);
             oldUser.setEmail(user.getEmail());
         }
-    }
-
-    private void updateLogin(User user, User oldUser) {
         if (user.getLogin() != null) {
             oldUser.setLogin(user.getLogin());
         }
-    }
-
-    private void updateName(User user, User oldUser) {
         if (user.getName() != null && !user.getName().isBlank()) {
             oldUser.setName(user.getName());
         }
-    }
-
-    private void updateBirthday(User user, User oldUser) {
         if (user.getBirthday() != null) {
             oldUser.setBirthday(user.getBirthday());
         }
     }
+
 }

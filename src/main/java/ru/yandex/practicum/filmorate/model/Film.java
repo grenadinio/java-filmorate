@@ -15,17 +15,17 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = "name")
 public class Film {
     @NotNull(groups = Update.class)
-    Long id;
+    private Long id;
 
     @NotBlank(message = "Название не может быть пустым.")
-    String name;
+    private String name;
 
     @Size(max = 200, message = "Описание не может быть больше 200 символов.")
-    String description;
+    private String description;
 
     @DateAfter(value = "28.12.1895")
-    LocalDate releaseDate;
+    private LocalDate releaseDate;
 
     @Positive(message = "Длительность фильма должна быть больше 0.")
-    Integer duration;
+    private Integer duration;
 }

@@ -45,11 +45,8 @@ public class FilmController {
         try {
             log.info("PUT /films ==> ID = {}, {}", film.getId(), film);
             Film oldFilm = films.get(film.getId());
-            updateName(film, oldFilm);
-            updateDescription(film, oldFilm);
-            updateReleaseDate(film, oldFilm);
-            updateDuration(film, oldFilm);
-            log.info("PUT /films <== ID = {}, {}", film.getId(), film);
+            updateFilm(film, oldFilm);
+            log.info("PUT /films <== ID = {}, {}", film.getId(), oldFilm);
             return oldFilm;
         } catch (Exception e) {
             log.error("Ошибка при обновлении фильма.", e);
@@ -65,26 +62,17 @@ public class FilmController {
         }
     }
 
-    private void updateName(Film film, Film oldFilm) {
+    private void updateFilm(Film film, Film oldFilm) {
         if (film.getName() != null) {
             validateNameUniqueness(film);
             oldFilm.setName(film.getName());
         }
-    }
-
-    private void updateDescription(Film film, Film oldFilm) {
         if (film.getDescription() != null) {
             oldFilm.setDescription(film.getDescription());
         }
-    }
-
-    private void updateReleaseDate(Film film, Film oldFilm) {
         if (film.getReleaseDate() != null) {
             oldFilm.setReleaseDate(film.getReleaseDate());
         }
-    }
-
-    private void updateDuration(Film film, Film oldFilm) {
         if (film.getDuration() != null) {
             oldFilm.setDuration(film.getDuration());
         }

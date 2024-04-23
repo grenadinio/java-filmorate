@@ -11,18 +11,18 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = "email")
 public class User {
     @NotNull(groups = Update.class)
-    Long id;
+    private Long id;
 
     @NotBlank(message = "Email не может быть пустым.")
     @Email(message = "Неверно указан Email.")
-    String email;
+    private String email;
 
     @NotBlank(message = "Логин не может быть пустым.")
     @Pattern(regexp = "^\\S+$", message = "Логин не должен содержать пробелов.")
-    String login;
+    private String login;
 
-    String name;
+    private String name;
 
     @Past(message = "Дата рождения не может быть в будущем.")
-    LocalDate birthday;
+    private LocalDate birthday;
 }
