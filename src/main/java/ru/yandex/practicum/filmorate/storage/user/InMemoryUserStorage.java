@@ -48,9 +48,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public List<User> getFriends(long userId) {
         List<User> friends = new ArrayList<>();
-        users.get(userId).getFriendsIds().forEach(id -> {
-            friends.add(users.get(id));
-        });
+        users.get(userId).getFriendsIds().forEach(id -> friends.add(users.get(id)));
         return friends;
     }
 
@@ -58,12 +56,8 @@ public class InMemoryUserStorage implements UserStorage {
     public List<User> getCommonFriends(long userId, long otherId) {
         List<User> userFriends = new ArrayList<>();
         List<User> otherFriends = new ArrayList<>();
-        users.get(userId).getFriendsIds().forEach(id -> {
-            userFriends.add(users.get(id));
-        });
-        users.get(otherId).getFriendsIds().forEach(id -> {
-            otherFriends.add(users.get(id));
-        });
+        users.get(userId).getFriendsIds().forEach(id -> userFriends.add(users.get(id)));
+        users.get(otherId).getFriendsIds().forEach(id -> otherFriends.add(users.get(id)));
 
         userFriends.retainAll(otherFriends);
         return userFriends;
