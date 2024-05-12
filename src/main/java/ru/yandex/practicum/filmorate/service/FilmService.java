@@ -83,7 +83,7 @@ public class FilmService {
 
     private void getUserOrThrowError(long userId) {
         userStorage.get(userId)
-                .orElseThrow(() -> new NotFoundException("User not found with " + userId));
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
     }
 
     private void getFilmOrThrowError(long filmId) {

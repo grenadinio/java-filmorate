@@ -20,40 +20,22 @@ public class FilmController {
 
     @GetMapping("/{filmId}")
     public Film get(@PathVariable Long filmId) {
-        log.info("GET /films/{}", filmId);
         return filmService.get(filmId);
     }
 
     @GetMapping
     public Collection<Film> getAll() {
-        log.info("GET /films");
         return filmService.getAll();
     }
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
-        try {
-            log.info("POST /films ==> {}", film);
-            Film newFilm = filmService.create(film);
-            log.info("POST /films <== {}", film);
-            return newFilm;
-        } catch (Exception e) {
-            log.error("Ошибка при создании фильма.", e);
-            throw e;
-        }
+        return filmService.create(film);
     }
 
     @PutMapping
     public Film update(@Validated(Update.class) @RequestBody Film film) {
-        try {
-            log.info("PUT /films ==> ID = {}, {}", film.getId(), film);
-            Film updatedFilm = filmService.update(film);
-            log.info("PUT /films <== ID = {}, {}", film.getId(), updatedFilm);
-            return updatedFilm;
-        } catch (Exception e) {
-            log.error("Ошибка при обновлении фильма.", e);
-            throw e;
-        }
+        return filmService.update(film);
     }
 
     @PutMapping("/{id}/like/{userId}")

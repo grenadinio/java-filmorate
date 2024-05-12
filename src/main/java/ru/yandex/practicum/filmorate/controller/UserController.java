@@ -21,41 +21,23 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public User get(@PathVariable Long userId) {
-        log.info("GET /users/{}", userId);
         return userService.get(userId);
     }
 
     @GetMapping
     public Collection<User> getAll() {
-        log.info("GET /users");
         return userService.getAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
-        try {
-            log.info("POST /users ==> {}", user);
-            User newUser = userService.create(user);
-            log.info("POST /users <== {}", user);
-            return newUser;
-        } catch (Exception e) {
-            log.error("Ошибка при создании пользователя.", e);
-            throw e;
-        }
+        return userService.create(user);
     }
 
     @PutMapping
     public User update(@Validated(Update.class) @RequestBody User user) {
-        try {
-            log.info("PUT /users ==> ID: {}, {}", user.getId(), user);
-            User updatedUser = userService.update(user);
-            log.info("PUT /users <== ID: {}, {}", user.getId(), updatedUser);
-            return updatedUser;
-        } catch (Exception e) {
-            log.error("Ошибка при обновлении пользователя.", e);
-            throw e;
-        }
+        return userService.update(user);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")

@@ -16,7 +16,7 @@ public class UserService {
     private final UserStorage userStorage;
 
     public User get(long userId) {
-        return userStorage.get(userId).orElseThrow(() -> new NotFoundException("User not found with " + userId));
+        return userStorage.get(userId).orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
     }
 
     public List<User> getAll() {
@@ -37,7 +37,7 @@ public class UserService {
                     updateUser(user, original);
                     return userStorage.update(original);
                 })
-                .orElseThrow(() -> new NotFoundException("User not found with " + user.getId()));
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + user.getId() + " не найден."));
     }
 
     public void addFriend(long userId, long friendId) {
@@ -89,6 +89,6 @@ public class UserService {
 
     private void getUserOrThrowError(long userId) {
         userStorage.get(userId)
-                .orElseThrow(() -> new NotFoundException("User not found with " + userId));
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден."));
     }
 }
