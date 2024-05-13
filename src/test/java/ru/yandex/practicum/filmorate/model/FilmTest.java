@@ -28,6 +28,7 @@ class FilmTest {
     @Test
     void shouldNotValidateNullName() {
         Film film = new Film();
+        film.setReleaseDate(LocalDate.now());
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertFalse(violations.isEmpty(), "Нарушений не найдено.");
@@ -37,9 +38,10 @@ class FilmTest {
     }
 
     @Test
-    void shouldNotValidateBlanklName() {
+    void shouldNotValidateBlankName() {
         Film film = new Film();
         film.setName("");
+        film.setReleaseDate(LocalDate.now());
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
         assertFalse(violations.isEmpty(), "Нарушений не найдено.");
