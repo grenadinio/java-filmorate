@@ -1,7 +1,6 @@
 # java-filmorate
 
-![Схема базы данных приложения Filmorate](\src\main\resources\images\Filmorate.png)
-
+![Схема базы данных приложения Filmorate](https://github.com/grenadinio/java-filmorate/raw/main/src/main/resources/images/Filmorate.png)
 Примеры запросов:
 
 1. **Получение списка друзей пользователя:**
