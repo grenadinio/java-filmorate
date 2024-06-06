@@ -127,4 +127,10 @@ public class JdbcFilmStorage implements FilmStorage {
                 "LIMIT :count";
         return jdbc.query(sql, Map.of("count", count), new FilmRowMapper(jdbc));
     }
+
+    public boolean hasUserLikedFilm(Long userId, Long filmId) {
+        String sql = "SELECT COUNT(*) FROM user_film_likes WHERE userId = :userId AND filmId = :filmId";
+        Integer count = jdbc.queryForObject(sql, Map.of("userId", userId, "filmId", filmId), Integer.class);
+        return count != null && count > 0;
+    }
 }

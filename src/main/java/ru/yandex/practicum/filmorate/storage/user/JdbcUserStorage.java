@@ -94,7 +94,10 @@ public class JdbcUserStorage implements UserStorage {
 
     @Override
     public List<User> getCommonFriends(long userId, long otherId) {
-        String sql = "SELECT u.* FROM USERS u INNER JOIN USER_FRIENDS uf1 ON u.ID = uf1.FRIENDID INNER JOIN USER_FRIENDS uf2 ON u.ID = uf2.FRIENDID WHERE uf1.USERID = :userId AND uf2.USERID = :otherId";
+        String sql = "SELECT u.* FROM USERS u " +
+                "INNER JOIN USER_FRIENDS uf1 ON u.ID = uf1.FRIENDID " +
+                "INNER JOIN USER_FRIENDS uf2 ON u.ID = uf2.FRIENDID " +
+                "WHERE uf1.USERID = :userId AND uf2.USERID = :otherId";
         return jdbc.query(sql, Map.of("userId", userId, "otherId", otherId), new UserRowMapper());
     }
 }

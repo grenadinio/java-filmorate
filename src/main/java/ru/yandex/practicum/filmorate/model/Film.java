@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ru.yandex.practicum.filmorate.annotation.DateAfter;
 import ru.yandex.practicum.filmorate.validator.Update;
 
@@ -16,6 +17,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(of = "name")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Film {
     @NotNull(groups = Update.class)
     private Long id;
