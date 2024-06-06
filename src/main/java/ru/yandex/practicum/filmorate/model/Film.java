@@ -1,21 +1,21 @@
 package ru.yandex.practicum.filmorate.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.yandex.practicum.filmorate.annotation.DateAfter;
 import ru.yandex.practicum.filmorate.validator.Update;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(of = "name")
+@AllArgsConstructor
 public class Film {
     @NotNull(groups = Update.class)
     private Long id;
@@ -32,6 +32,7 @@ public class Film {
     @Positive(message = "Длительность фильма должна быть больше 0.")
     private Integer duration;
 
-    @JsonIgnore
-    private Set<Long> userIdsLiked = new HashSet<>();
+    private MPA mpa;
+
+    private List<Genre> genres;
 }
