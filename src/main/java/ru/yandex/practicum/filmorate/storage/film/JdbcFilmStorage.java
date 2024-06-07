@@ -22,14 +22,22 @@ public class JdbcFilmStorage implements FilmStorage {
 
     @Override
     public Optional<Film> get(Long id) {
-        String sql = "SELECT * FROM films WHERE id = :id";
-        List<Film> films = jdbc.query(sql, Map.of("id", id), new FilmRowMapper(jdbc));
+        String sql = "SELECT f.*, m.id as mpa_id, m.name as mpaRatingName, g.id as genre_id, g.name as genre_name FROM films f " +
+                "LEFT JOIN MPA_RATING m ON f.mpaRatingId = m.id " +
+                "LEFT JOIN FILM_GENRE fg ON f.id = fg.FILMID " +
+                "LEFT JOIN GENRES g ON fg.GENREID = g.id " +
+                "WHERE f.id = :id";
+        List<Film> films = jdbc.query(sql, Map.of("id", id), new FilmRowMapper());
         return films.stream().findFirst();
     }
 
     @Override
     public List<Film> getAll() {
-        return jdbc.query("SELECT * FROM films", new FilmRowMapper(jdbc));
+        String sql = "SELECT f.*, m.id as mpa_id, m.name as mpaRatingName, g.id as genre_id, g.name as genre_name FROM films f " +
+                "LEFT JOIN MPA_RATING m ON f.mpaRatingId = m.id " +
+                "LEFT JOIN FILM_GENRE fg ON f.id = fg.FILMID " +
+                "LEFT JOIN GENRES g ON fg.GENREID = g.id";
+        return jdbc.query(sql, new FilmRowMapper());
     }
 
     @Override
@@ -119,13 +127,16 @@ public class JdbcFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> getTopLikedFilms(Long count) {
-        String sql = "SELECT films.*, COUNT(user_film_likes.filmId) as likes " +
-                "FROM films " +
-                "LEFT JOIN user_film_likes ON films.id = user_film_likes.filmId " +
-                "GROUP BY films.id " +
+        String sql = "SELECT f.*, m.id as mpa_id, m.name as mpaRatingName, g.id as genre_id, g.name as genre_name, COUNT(ufl.filmId) as likes " +
+                "FROM films f " +
+                "LEFT JOIN MPA_RATING m ON f.mpaRatingId = m.id " +
+                "LEFT JOIN FILM_GENRE fg ON f.id = fg.FILMID " +
+                "LEFT JOIN GENRES g ON fg.GENREID = g.id " +
+                "LEFT JOIN user_film_likes ufl ON f.id = ufl.filmId " +
+                "GROUP BY f.id, m.id, g.id " +
                 "ORDER BY likes DESC " +
                 "LIMIT :count";
-        return jdbc.query(sql, Map.of("count", count), new FilmRowMapper(jdbc));
+        return jdbc.query(sql, Map.of("count", count), new FilmRowMapper());
     }
 
     public boolean hasUserLikedFilm(Long userId, Long filmId) {

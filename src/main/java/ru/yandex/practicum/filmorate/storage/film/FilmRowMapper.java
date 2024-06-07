@@ -1,42 +1,50 @@
 package ru.yandex.practicum.filmorate.storage.film;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.MPA;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
-@RequiredArgsConstructor
 public class FilmRowMapper implements RowMapper<Film> {
-    private final NamedParameterJdbcOperations jdbc;
+
+    private final Map<Long, Film> map = new HashMap<>();
 
     @Override
     public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
-        Long filmId = rs.getLong("id");
+        Long id = rs.getLong("id");
+        Film film = map.get(id);
 
-        // Fetch the MPA rating
-        MPA mpa = jdbc.queryForObject("SELECT * FROM MPA_RATING WHERE ID = :mpaRatingId",
-                Map.of("mpaRatingId", rs.getLong("mpaRatingId")), new BeanPropertyRowMapper<>(MPA.class));
+        if (film == null) {
+            MPA mpa = new MPA();
+            mpa.setId(rs.getLong("mpaRatingId"));
+            mpa.setName(rs.getString("mpaRatingName"));
+            film = new Film(
+                    id,
+                    rs.getString("name"),
+                    rs.getString("description"),
+                    rs.getDate("releaseDate").toLocalDate(),
+                    rs.getInt("duration"),
+                    mpa,
+                    new ArrayList<>()
+            );
+            map.put(id, film);
+        }
 
-        // Fetch the genres
-        List<Genre> genres = jdbc.query("SELECT g.* FROM GENRES g JOIN FILM_GENRE fg ON g.ID = fg.GENREID WHERE fg.FILMID = :filmId",
-                Map.of("filmId", filmId), new BeanPropertyRowMapper<>(Genre.class));
+        long genreId = rs.getLong("genre_id");
+        if (genreId > 0) {
+            Genre genre = new Genre();
+            genre.setId(genreId);
+            genre.setName(rs.getString("genre_name"));
 
-        return new Film(
-                filmId,
-                rs.getString("name"),
-                rs.getString("description"),
-                rs.getDate("releaseDate").toLocalDate(),
-                rs.getInt("duration"),
-                mpa,
-                genres
-        );
+            film.getGenres().add(genre);
+        }
+
+        return film;
     }
 }
