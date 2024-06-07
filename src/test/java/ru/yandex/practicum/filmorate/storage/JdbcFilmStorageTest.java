@@ -25,7 +25,7 @@ public class JdbcFilmStorageTest {
     private final JdbcFilmStorage filmStorage;
 
     @Test
-    public void testFindFilmById() {
+    public void getFilmShouldReturnFilmWithTestFilmId() {
         Optional<Film> filmOptional = filmStorage.get(TEST_FILM_ID);
 
         assertThat(filmOptional)
@@ -38,14 +38,14 @@ public class JdbcFilmStorageTest {
     }
 
     @Test
-    public void testGetAllFilms() {
+    public void getAllFilmsShouldReturnTwoFilms() {
         List<Film> films = filmStorage.getAll();
         assertThat(films).isNotEmpty();
         assertThat(films).hasSize(2);
     }
 
     @Test
-    public void testCreateFilm() {
+    public void createFilmShouldInsertNewFilmToDatabase() {
         Film newFilm = new Film();
         MPA mpa = new MPA();
         mpa.setId(1L);
@@ -63,7 +63,7 @@ public class JdbcFilmStorageTest {
     }
 
     @Test
-    public void testUpdateFilm() {
+    public void updateFilmShouldUpdateExistingFilmInDatabase() {
         Optional<Film> filmOptional = filmStorage.get(TEST_FILM_ID);
         Film film = filmOptional.orElseThrow();
         film.setName("Updated Name");
@@ -74,7 +74,7 @@ public class JdbcFilmStorageTest {
     }
 
     @Test
-    public void testAddAndRemoveLike() {
+    public void addAndRemoveLikeShouldInsertAndDeleteLikesInDatabase() {
         Long userId = 1L;
         Long filmId = 1L;
 
@@ -88,7 +88,7 @@ public class JdbcFilmStorageTest {
     }
 
     @Test
-    public void testGetTopLikedFilms() {
+    public void getTopLikedFilmsShouldReturnTopFilmsFromDatabase() {
         filmStorage.addLike(1L, 1L);
         filmStorage.addLike(1L, 2L);
         filmStorage.addLike(2L, 1L);
